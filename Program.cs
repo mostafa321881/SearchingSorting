@@ -1,5 +1,7 @@
 ﻿using SearchingSorting.Services;
 using SearchingSorting.Models;
+using SearchingSorting.Algorithms;
+using SearchingSorting.Enums;
 namespace SearchingSorting;
 
 class Program
@@ -11,7 +13,13 @@ class Program
         Console.WriteLine($"Loaded contacts: {contacts.Length}");
         Phonebook phonebook = new Phonebook(contacts);
 
-        Contact? found = phonebook.FindByFirstName("Geir");
+        Contact? found = LinearSearch.Search(
+            contacts,
+            "\"ZZZ_NOT_FOUND\"",
+            Field.FirstName,
+            out int comparisons
+        );
+        Console.WriteLine($"Comparisons: {comparisons}");
 
         if (found != null)
         {

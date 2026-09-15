@@ -12,6 +12,14 @@ public class Contact
     {
         get { return _firstName; }
     }
+    public string LastName
+    {
+        get { return _lastName; }
+    }
+    public string Mobile
+    {
+        get { return _mobile; }
+    }
 
     public Contact(
         string firstName,
