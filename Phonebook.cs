@@ -10,4 +10,16 @@ public class Phonebook
     {
         _contacts = contacts;
     }
+    public Contact? FindByFirstName(string firstName)
+    {
+        foreach (Contact contact in _contacts)
+        {
+            if (contact.FirstName == firstName)
+            {
+                return contact;
+            }
+        }
+
+        return null;
+    }
 }

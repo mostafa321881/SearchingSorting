@@ -8,6 +8,10 @@ public class Contact
     private string _birthday;
     private string _street;
     private string _city;
+    public string FirstName
+    {
+        get { return _firstName; }
+    }
 
     public Contact(
         string firstName,
