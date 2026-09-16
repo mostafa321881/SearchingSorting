@@ -12,10 +12,14 @@ class Program
         Contact[] contacts = loader.Load("Data/phonebook.csv");
         Console.WriteLine($"Loaded contacts: {contacts.Length}");
         Phonebook phonebook = new Phonebook(contacts);
+        PhonebookSorter.Sort(contacts, Field.FirstName, SortOrder.Descending, out int sortComparisons);
+        Console.WriteLine($"Sort comparisons: {sortComparisons}");
+        Console.WriteLine($"First name after sorting: {contacts[0].FirstName}");
+        Console.WriteLine($"Last name after sorting: {contacts[^1].FirstName}");
 
         Contact? found = LinearSearch.Search(
             contacts,
-            "\"ZZZ_NOT_FOUND\"",
+            "ZZZ_NOT_FOUND",
             Field.FirstName,
             out int comparisons
         );
