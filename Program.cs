@@ -1,5 +1,5 @@
-﻿using SearchingSorting.Tests;
-using SearchingSorting.Services;
+﻿using SearchingSorting.Services;
+using SearchingSorting.Models;
 
 namespace SearchingSorting;
 
@@ -7,10 +7,24 @@ class Program
 {
     static void Main()
     {
-        AlgorithmTests.Run();
+        try
+        {
+            CsvLoader loader = new CsvLoader();
 
-        CsvLoader loader = new CsvLoader();
-        var contacts = loader.Load("Data/phonebook.csv");
-        BenchmarkRunner.Run(contacts);
+            Contact[] contacts =
+                loader.Load("Data/phonebook.csv");
+
+            Phonebook phonebook =
+                new Phonebook(contacts);
+
+            BenchmarkRunner.Run(phonebook.GetContacts());
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine();
+            Console.WriteLine("ERROR");
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine(exception.Message);
+        }
     }
 }

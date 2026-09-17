@@ -6,20 +6,24 @@ public class Phonebook
 {
     private readonly Contact[] _contacts;
 
+    /// <summary>
+    /// Creates a phonebook containing the supplied contacts.
+    /// </summary>
     public Phonebook(Contact[] contacts)
     {
-        _contacts = contacts;
-    }
-    public Contact? FindByFirstName(string firstName)
-    {
-        foreach (Contact contact in _contacts)
+        if (contacts == null)
         {
-            if (contact.FirstName == firstName)
-            {
-                return contact;
-            }
+            throw new ArgumentNullException(nameof(contacts));
         }
 
-        return null;
+        _contacts = (Contact[])contacts.Clone();
+    }
+
+    /// <summary>
+    /// Returns a copy of the contacts stored in the phonebook.
+    /// </summary>
+    public Contact[] GetContacts()
+    {
+        return (Contact[])_contacts.Clone();
     }
 }

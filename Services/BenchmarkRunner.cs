@@ -13,12 +13,17 @@ public class BenchmarkRunner
             throw new ArgumentNullException(nameof(contacts));
         }
 
-        Console.WriteLine($"Loaded {contacts.Length} contacts from phonebook.csv");
         Console.WriteLine();
+        Console.WriteLine("SEARCHING AND SORTING - RESULTS");
+        Console.WriteLine("============================================================");
+        Console.WriteLine($"Loaded {contacts.Length} contacts from phonebook.csv");
 
         RunLinearSearchBenchmarks(contacts);
         RunSortingBenchmarks(contacts);
         RunBinarySearchTests(contacts);
+
+        Console.WriteLine("============================================================");
+        Console.WriteLine("Program completed successfully.");
     }
 
     // ---------------------------------------------------------
@@ -27,36 +32,40 @@ public class BenchmarkRunner
 
     private static void RunLinearSearchBenchmarks(Contact[] contacts)
     {
-        Console.WriteLine("--- 1. Linear search, unsorted ---");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("1. LINEAR SEARCH - UNSORTED DATA");
+        Console.WriteLine("------------------------------------------------------------");
 
         Console.WriteLine(
-            $"{"field",-12} {"target",-20} {"matches",-10} {"comparisons",-12}");
+            $"{"Field",-12} {"Target",-20} {"Matches",10} {"Comparisons",14}");
 
-        // Case 1: value held by first record
+        Console.WriteLine(
+            $"{"-----",-12} {"------",-20} {"-------",10} {"-----------",14}");
+
+        // Required case 1: value held by the first record
         PrintLinearResult(
             contacts,
             contacts[0].FirstName,
             Field.FirstName);
 
-        // Case 2: value held by last record
+        // Required case 2: value held by the last record
         PrintLinearResult(
             contacts,
             contacts[^1].Mobile,
             Field.Mobile);
 
-        // Case 3: absent surname
+        // Required case 3: absent surname
         PrintLinearResult(
             contacts,
             "ZZZ_NOT_FOUND",
             Field.LastName);
 
-        // Case 4: absent mobile
+        // Required case 4: absent mobile
         PrintLinearResult(
             contacts,
             "00000000",
             Field.Mobile);
-
-        Console.WriteLine();
     }
 
     private static void PrintLinearResult(
@@ -71,7 +80,7 @@ public class BenchmarkRunner
             out int comparisons);
 
         Console.WriteLine(
-            $"{field,-12} {target,-20} {matches.Length,-10} {comparisons,-12}");
+            $"{field,-12} {target,-20} {matches.Length,10} {comparisons,14}");
     }
 
     // ---------------------------------------------------------
@@ -80,15 +89,19 @@ public class BenchmarkRunner
 
     private static void RunSortingBenchmarks(Contact[] contacts)
     {
-        Console.WriteLine("--- 2. Sorting, by LastName ascending ---");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("2. SORTING - LASTNAME ASCENDING");
+        Console.WriteLine("------------------------------------------------------------");
 
         Console.WriteLine(
-            $"{"algorithm",-16} {"shape",-18} {"comparisons",-14} {"moves",-10}");
+            $"{"Algorithm",-16} {"Input",-18} {"Comparisons",14} {"Moves",10}");
+
+        Console.WriteLine(
+            $"{"---------",-16} {"-----",-18} {"-----------",14} {"-----",10}");
 
         RunInsertionSortCases(contacts);
         RunMergeSortCases(contacts);
-
-        Console.WriteLine();
     }
 
     private static void RunInsertionSortCases(Contact[] contacts)
@@ -104,8 +117,8 @@ public class BenchmarkRunner
             out int moves);
 
         PrintSortResult(
-            "InsertionSort",
-            "as-supplied",
+            "Insertion Sort",
+            "As supplied",
             comparisons,
             moves);
 
@@ -120,8 +133,8 @@ public class BenchmarkRunner
             out moves);
 
         PrintSortResult(
-            "InsertionSort",
-            "already-sorted",
+            "Insertion Sort",
+            "Already sorted",
             comparisons,
             moves);
 
@@ -143,8 +156,8 @@ public class BenchmarkRunner
             out moves);
 
         PrintSortResult(
-            "InsertionSort",
-            "reverse-sorted",
+            "Insertion Sort",
+            "Reverse sorted",
             comparisons,
             moves);
     }
@@ -162,8 +175,8 @@ public class BenchmarkRunner
             out int moves);
 
         PrintSortResult(
-            "MergeSort",
-            "as-supplied",
+            "Merge Sort",
+            "As supplied",
             comparisons,
             moves);
 
@@ -178,8 +191,8 @@ public class BenchmarkRunner
             out moves);
 
         PrintSortResult(
-            "MergeSort",
-            "already-sorted",
+            "Merge Sort",
+            "Already sorted",
             comparisons,
             moves);
 
@@ -201,38 +214,44 @@ public class BenchmarkRunner
             out moves);
 
         PrintSortResult(
-            "MergeSort",
-            "reverse-sorted",
+            "Merge Sort",
+            "Reverse sorted",
             comparisons,
             moves);
     }
 
     private static void PrintSortResult(
         string algorithm,
-        string shape,
+        string input,
         int comparisons,
         int moves)
     {
         Console.WriteLine(
-            $"{algorithm,-16} {shape,-18} {comparisons,-14} {moves,-10}");
+            $"{algorithm,-16} {input,-18} {comparisons,14} {moves,10}");
     }
 
     // ---------------------------------------------------------
-    // 3. BINARY SEARCH - REQUIRED 8 TESTS
+    // 3. BINARY SEARCH
     // ---------------------------------------------------------
 
     private static void RunBinarySearchTests(Contact[] contacts)
     {
-        Console.WriteLine("--- 3. Binary search tests ---");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("3. BINARY SEARCH - SORTED DATA");
+        Console.WriteLine("------------------------------------------------------------");
 
         Console.WriteLine(
-            $"{"#",-3} {"field",-12} {"target",-18} {"result",-12} {"comparisons",-12} {"status",-6}");
+            $"{"Test",-5} {"Field",-11} {"Target",-16} " +
+            $"{"Result",-11} {"Comparisons",11} {"Status",8}");
 
-        // -----------------------------------------------------
-        // TEST 1
-        // Mobile: any number from the file
-        // -----------------------------------------------------
+        Console.WriteLine(
+            $"{"----",-5} {"-----",-11} {"------",-16} " +
+            $"{"------",-11} {"-----------",11} {"------",8}");
 
+        int passedTests = 0;
+
+        // TEST 1 - Mobile number from file
         Contact[] byMobile = (Contact[])contacts.Clone();
 
         MergeSort.Sort(
@@ -265,16 +284,16 @@ public class BenchmarkRunner
             mobileComparisons,
             test1);
 
-        // -----------------------------------------------------
-        // TEST 2
-        // Mobile below smallest
-        // -----------------------------------------------------
+        if (test1) passedTests++;
 
+        // TEST 2 - Mobile below smallest
         int belowIndex = BinarySearch.Search(
             byMobile,
             "00000000",
             Field.Mobile,
             out int belowComparisons);
+
+        bool test2 = belowIndex == -1;
 
         PrintBinaryTest(
             2,
@@ -282,18 +301,18 @@ public class BenchmarkRunner
             "00000000",
             belowIndex,
             belowComparisons,
-            belowIndex == -1);
+            test2);
 
-        // -----------------------------------------------------
-        // TEST 3
-        // Mobile above largest
-        // -----------------------------------------------------
+        if (test2) passedTests++;
 
+        // TEST 3 - Mobile above largest
         int aboveIndex = BinarySearch.Search(
             byMobile,
             "99999999",
             Field.Mobile,
             out int aboveComparisons);
+
+        bool test3 = aboveIndex == -1;
 
         PrintBinaryTest(
             3,
@@ -301,12 +320,11 @@ public class BenchmarkRunner
             "99999999",
             aboveIndex,
             aboveComparisons,
-            aboveIndex == -1);
+            test3);
 
-        // -----------------------------------------------------
-        // Sort by LastName for tests 4 and 5
-        // -----------------------------------------------------
+        if (test3) passedTests++;
 
+        // Sort by LastName
         Contact[] byLastName = (Contact[])contacts.Clone();
 
         MergeSort.Sort(
@@ -316,11 +334,7 @@ public class BenchmarkRunner
             out _,
             out _);
 
-        // -----------------------------------------------------
-        // TEST 4
-        // Duplicate LastName - must return lowest index
-        // -----------------------------------------------------
-
+        // TEST 4 - Duplicate LastName
         string duplicateLastName =
             FindDuplicateAfterFirstPosition(
                 byLastName,
@@ -350,29 +364,26 @@ public class BenchmarkRunner
             lastNameComparisons,
             test4);
 
-        // Required proof
+        if (test4) passedTests++;
+
         if (lastNameIndex > 0)
         {
             string previousLastName =
                 byLastName[lastNameIndex - 1].LastName;
 
             Console.WriteLine(
-                $"    check: contacts[{lastNameIndex - 1}] = " +
-                $"{previousLastName}, so index {lastNameIndex} is " +
-                $"the first {duplicateLastName}: " +
-                $"{(test4 ? "PASS" : "FAIL")}");
+                $"      Previous value: {previousLastName,-15} " +
+                $"First occurrence confirmed: {(test4 ? "PASS" : "FAIL")}");
         }
 
-        // -----------------------------------------------------
-        // TEST 5
-        // Absent LastName
-        // -----------------------------------------------------
-
+        // TEST 5 - Missing LastName
         int missingLastNameIndex = BinarySearch.Search(
             byLastName,
             "ZZZ_NOT_FOUND",
             Field.LastName,
             out int missingLastNameComparisons);
+
+        bool test5 = missingLastNameIndex == -1;
 
         PrintBinaryTest(
             5,
@@ -380,12 +391,11 @@ public class BenchmarkRunner
             "ZZZ_NOT_FOUND",
             missingLastNameIndex,
             missingLastNameComparisons,
-            missingLastNameIndex == -1);
+            test5);
 
-        // -----------------------------------------------------
-        // Sort by FirstName for test 6
-        // -----------------------------------------------------
+        if (test5) passedTests++;
 
+        // Sort by FirstName
         Contact[] byFirstName = (Contact[])contacts.Clone();
 
         MergeSort.Sort(
@@ -395,11 +405,7 @@ public class BenchmarkRunner
             out _,
             out _);
 
-        // -----------------------------------------------------
-        // TEST 6
-        // FirstName - return lowest index
-        // -----------------------------------------------------
-
+        // TEST 6 - FirstName, lowest index
         string firstNameTarget =
             FindDuplicateAfterFirstPosition(
                 byFirstName,
@@ -429,24 +435,19 @@ public class BenchmarkRunner
             firstNameComparisons,
             test6);
 
-        // Required proof
+        if (test6) passedTests++;
+
         if (firstNameIndex > 0)
         {
             string previousFirstName =
                 byFirstName[firstNameIndex - 1].FirstName;
 
             Console.WriteLine(
-                $"    check: contacts[{firstNameIndex - 1}] = " +
-                $"{previousFirstName}, so index {firstNameIndex} is " +
-                $"the first {firstNameTarget}: " +
-                $"{(test6 ? "PASS" : "FAIL")}");
+                $"      Previous value: {previousFirstName,-15} " +
+                $"First occurrence confirmed: {(test6 ? "PASS" : "FAIL")}");
         }
 
-        // -----------------------------------------------------
-        // TEST 7
-        // Empty array
-        // -----------------------------------------------------
-
+        // TEST 7 - Empty array
         Contact[] empty = Array.Empty<Contact>();
 
         int emptyIndex = BinarySearch.Search(
@@ -455,19 +456,19 @@ public class BenchmarkRunner
             Field.FirstName,
             out int emptyComparisons);
 
+        bool test7 = emptyIndex == -1;
+
         PrintBinaryTest(
             7,
             Field.FirstName,
-            "empty array",
+            "Empty array",
             emptyIndex,
             emptyComparisons,
-            emptyIndex == -1);
+            test7);
 
-        // -----------------------------------------------------
-        // TEST 8
-        // Single-element array
-        // -----------------------------------------------------
+        if (test7) passedTests++;
 
+        // TEST 8 - Single-element array
         Contact[] single =
         {
             new Contact(
@@ -485,15 +486,21 @@ public class BenchmarkRunner
             Field.FirstName,
             out int singleComparisons);
 
+        bool test8 = singleIndex == 0;
+
         PrintBinaryTest(
             8,
             Field.FirstName,
             "Only",
             singleIndex,
             singleComparisons,
-            singleIndex == 0);
+            test8);
+
+        if (test8) passedTests++;
 
         Console.WriteLine();
+        Console.WriteLine(
+            $"Required binary search tests: {passedTests}/8 PASS");
     }
 
     private static void PrintBinaryTest(
@@ -506,7 +513,7 @@ public class BenchmarkRunner
     {
         string result =
             index >= 0
-                ? $"index {index}"
+                ? $"Index {index}"
                 : "-1";
 
         string status =
@@ -515,13 +522,10 @@ public class BenchmarkRunner
                 : "FAIL";
 
         Console.WriteLine(
-            $"{testNumber,-3} {field,-12} {target,-18} " +
-            $"{result,-12} {comparisons,-12} {status,-6}");
+            $"{testNumber,-5} {field,-11} {target,-16} " +
+            $"{result,-11} {comparisons,11} {status,8}");
     }
 
-    // Finds a duplicate whose first occurrence is after index 0.
-    // This allows us to print the item immediately before it
-    // as proof that Binary Search returned the lowest index.
     private static string FindDuplicateAfterFirstPosition(
         Contact[] contacts,
         Field field)

@@ -170,7 +170,6 @@ public class MergeSort
         for (int index = left; index <= right; index++)
         {
             contacts[index] = temporary[index];
-            moves++;
         }
     }
 }

@@ -9,7 +9,8 @@ public class LinearSearch
     /// <summary>
     /// Searches all contacts for exact, case-insensitive matches in the selected field.
     /// Returns every matching contact.
-    /// Time complexity: O(n). Space complexity: O(n) for the returned matches.
+    /// Time complexity: O(n).
+    /// Space complexity: O(n) in the worst case for the returned matches.
     /// </summary>
     public static Contact[] Search(
         Contact[] contacts,
@@ -22,6 +23,11 @@ public class LinearSearch
             throw new ArgumentNullException(nameof(contacts));
         }
 
+        if (searchTerm == null)
+        {
+            throw new ArgumentNullException(nameof(searchTerm));
+        }
+
         comparisons = 0;
         List<Contact> matches = new List<Contact>();
 
@@ -29,7 +35,8 @@ public class LinearSearch
         {
             comparisons++;
 
-            string value = ContactComparer.GetFieldValue(contact, field);
+            string value =
+                ContactComparer.GetFieldValue(contact, field);
 
             if (ContactComparer.Compare(value, searchTerm) == 0)
             {
