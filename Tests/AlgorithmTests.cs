@@ -17,36 +17,41 @@ public class AlgorithmTests
 
         Console.WriteLine("=== ALGORITHM TESTS ===");
 
-        Contact? linearFound = LinearSearch.Search(
+        // Linear Search - found
+        Contact[] linearFound = LinearSearch.Search(
             contacts,
             "Alice",
             Field.FirstName,
             out int linearComparisons);
 
         Console.WriteLine(
-            $"Linear found: {linearFound?.FirstName}, comparisons: {linearComparisons}");
+            $"Linear found: {linearFound.Length > 0}, matches: {linearFound.Length}, comparisons: {linearComparisons}");
 
-        Contact? linearMissing = LinearSearch.Search(
+        // Linear Search - missing
+        Contact[] linearMissing = LinearSearch.Search(
             contacts,
             "ZZZ",
             Field.FirstName,
             out int linearMissingComparisons);
 
         Console.WriteLine(
-            $"Linear missing: {linearMissing == null}, comparisons: {linearMissingComparisons}");
+            $"Linear missing: {linearMissing.Length == 0}, matches: {linearMissing.Length}, comparisons: {linearMissingComparisons}");
 
+        // Insertion Sort - ascending
         PhonebookSorter.Sort(
             contacts,
             Field.FirstName,
             SortOrder.Ascending,
-            out int ascendingSortComparisons);
+            out int ascendingSortComparisons,
+            out int ascendingSortMoves);
 
         Console.WriteLine(
             $"Ascending: {contacts[0].FirstName}, {contacts[1].FirstName}, {contacts[2].FirstName}");
 
         Console.WriteLine(
-            $"Ascending sort comparisons: {ascendingSortComparisons}");
+            $"Ascending sort comparisons: {ascendingSortComparisons}, moves: {ascendingSortMoves}");
 
+        // Binary Search - ascending found
         Contact? binaryAscending = BinarySearch.Search(
             contacts,
             "Bob",
@@ -57,6 +62,7 @@ public class AlgorithmTests
         Console.WriteLine(
             $"Binary ascending found: {binaryAscending?.FirstName}, comparisons: {binaryAscendingComparisons}");
 
+        // Binary Search - ascending missing
         Contact? binaryMissing = BinarySearch.Search(
             contacts,
             "ZZZ",
@@ -67,18 +73,21 @@ public class AlgorithmTests
         Console.WriteLine(
             $"Binary ascending missing: {binaryMissing == null}, comparisons: {binaryMissingComparisons}");
 
+        // Insertion Sort - descending
         PhonebookSorter.Sort(
             contacts,
             Field.FirstName,
             SortOrder.Descending,
-            out int descendingSortComparisons);
+            out int descendingSortComparisons,
+            out int descendingSortMoves);
 
         Console.WriteLine(
             $"Descending: {contacts[0].FirstName}, {contacts[1].FirstName}, {contacts[2].FirstName}");
 
         Console.WriteLine(
-            $"Descending sort comparisons: {descendingSortComparisons}");
+            $"Descending sort comparisons: {descendingSortComparisons}, moves: {descendingSortMoves}");
 
+        // Binary Search - descending found
         Contact? binaryDescending = BinarySearch.Search(
             contacts,
             "Bob",

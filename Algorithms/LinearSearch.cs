@@ -6,18 +6,37 @@ namespace SearchingSorting.Algorithms;
 
 public class LinearSearch
 {
-    public static Contact? Search(Contact[] contacts, string searchTerm, Field field, out int comparisons)
+    /// <summary>
+    /// Searches all contacts for exact, case-insensitive matches in the selected field.
+    /// Returns every matching contact.
+    /// Time complexity: O(n). Space complexity: O(n) for the returned matches.
+    /// </summary>
+    public static Contact[] Search(
+        Contact[] contacts,
+        string searchTerm,
+        Field field,
+        out int comparisons)
     {
+        if (contacts == null)
+        {
+            throw new ArgumentNullException(nameof(contacts));
+        }
+
         comparisons = 0;
+        List<Contact> matches = new List<Contact>();
+
         foreach (Contact contact in contacts)
         {
             comparisons++;
+
             string value = ContactComparer.GetFieldValue(contact, field);
+
             if (ContactComparer.Compare(value, searchTerm) == 0)
             {
-                return contact;
+                matches.Add(contact);
             }
         }
-        return null;
+
+        return matches.ToArray();
     }
 }
