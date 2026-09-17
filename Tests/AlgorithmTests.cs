@@ -8,6 +8,8 @@ public class AlgorithmTests
 {
     public static void Run()
     {
+        Console.WriteLine("=== ALGORITHM TESTS ===");
+
         Contact[] contacts =
         {
             new Contact("Charlie", "Brown", "333", "2000-01-01", "Street 3", "Oslo"),
@@ -15,9 +17,7 @@ public class AlgorithmTests
             new Contact("Bob", "Berg", "222", "2000-01-03", "Street 2", "Trondheim")
         };
 
-        Console.WriteLine("=== ALGORITHM TESTS ===");
-
-        // Linear Search - found
+        // Linear Search
         Contact[] linearFound = LinearSearch.Search(
             contacts,
             "Alice",
@@ -25,79 +25,105 @@ public class AlgorithmTests
             out int linearComparisons);
 
         Console.WriteLine(
-            $"Linear found: {linearFound.Length > 0}, matches: {linearFound.Length}, comparisons: {linearComparisons}");
+            $"Linear Search: {(linearFound.Length == 1 ? "PASS" : "FAIL")}");
 
-        // Linear Search - missing
-        Contact[] linearMissing = LinearSearch.Search(
-            contacts,
-            "ZZZ",
-            Field.FirstName,
-            out int linearMissingComparisons);
+        // Insertion Sort
+        Contact[] insertionContacts = (Contact[])contacts.Clone();
 
-        Console.WriteLine(
-            $"Linear missing: {linearMissing.Length == 0}, matches: {linearMissing.Length}, comparisons: {linearMissingComparisons}");
-
-        // Insertion Sort - ascending
         PhonebookSorter.Sort(
-            contacts,
+            insertionContacts,
             Field.FirstName,
             SortOrder.Ascending,
-            out int ascendingSortComparisons,
-            out int ascendingSortMoves);
+            out int insertionComparisons,
+            out int insertionMoves);
+
+        bool insertionCorrect =
+            insertionContacts[0].FirstName == "Alice" &&
+            insertionContacts[1].FirstName == "Bob" &&
+            insertionContacts[2].FirstName == "Charlie";
 
         Console.WriteLine(
-            $"Ascending: {contacts[0].FirstName}, {contacts[1].FirstName}, {contacts[2].FirstName}");
+            $"Insertion Sort: {(insertionCorrect ? "PASS" : "FAIL")} " +
+            $"(comparisons: {insertionComparisons}, moves: {insertionMoves})");
+
+        // Merge Sort
+        Contact[] mergeContacts = (Contact[])contacts.Clone();
+
+        MergeSort.Sort(
+            mergeContacts,
+            Field.FirstName,
+            SortOrder.Ascending,
+            out int mergeComparisons,
+            out int mergeMoves);
+
+        bool mergeCorrect =
+            mergeContacts[0].FirstName == "Alice" &&
+            mergeContacts[1].FirstName == "Bob" &&
+            mergeContacts[2].FirstName == "Charlie";
 
         Console.WriteLine(
-            $"Ascending sort comparisons: {ascendingSortComparisons}, moves: {ascendingSortMoves}");
+            $"Merge Sort: {(mergeCorrect ? "PASS" : "FAIL")} " +
+            $"(comparisons: {mergeComparisons}, moves: {mergeMoves})");
 
-        // Binary Search - ascending found
-        Contact? binaryAscending = BinarySearch.Search(
-            contacts,
+        // Binary Search
+        int binaryIndex = BinarySearch.Search(
+            mergeContacts,
             "Bob",
             Field.FirstName,
-            SortOrder.Ascending,
-            out int binaryAscendingComparisons);
+            out int binaryComparisons);
+
+        bool binaryCorrect =
+            binaryIndex == 1;
 
         Console.WriteLine(
-            $"Binary ascending found: {binaryAscending?.FirstName}, comparisons: {binaryAscendingComparisons}");
+            $"Binary Search: {(binaryCorrect ? "PASS" : "FAIL")} " +
+            $"(index: {binaryIndex}, comparisons: {binaryComparisons})");
 
-        // Binary Search - ascending missing
-        Contact? binaryMissing = BinarySearch.Search(
-            contacts,
+        // Binary Search - missing value
+        int missingIndex = BinarySearch.Search(
+            mergeContacts,
             "ZZZ",
             Field.FirstName,
-            SortOrder.Ascending,
-            out int binaryMissingComparisons);
+            out int missingComparisons);
 
         Console.WriteLine(
-            $"Binary ascending missing: {binaryMissing == null}, comparisons: {binaryMissingComparisons}");
+            $"Binary missing: {(missingIndex == -1 ? "PASS" : "FAIL")} " +
+            $"(index: {missingIndex}, comparisons: {missingComparisons})");
 
-        // Insertion Sort - descending
-        PhonebookSorter.Sort(
-            contacts,
+        // Empty array
+        Contact[] empty = Array.Empty<Contact>();
+
+        int emptyIndex = BinarySearch.Search(
+            empty,
+            "Alice",
             Field.FirstName,
-            SortOrder.Descending,
-            out int descendingSortComparisons,
-            out int descendingSortMoves);
+            out int emptyComparisons);
 
         Console.WriteLine(
-            $"Descending: {contacts[0].FirstName}, {contacts[1].FirstName}, {contacts[2].FirstName}");
+            $"Binary empty array: {(emptyIndex == -1 ? "PASS" : "FAIL")}");
 
-        Console.WriteLine(
-            $"Descending sort comparisons: {descendingSortComparisons}, moves: {descendingSortMoves}");
+        // Single-element array
+        Contact[] single =
+        {
+            new Contact(
+                "Alice",
+                "Andersen",
+                "111",
+                "2000-01-02",
+                "Street 1",
+                "Bergen")
+        };
 
-        // Binary Search - descending found
-        Contact? binaryDescending = BinarySearch.Search(
-            contacts,
-            "Bob",
+        int singleIndex = BinarySearch.Search(
+            single,
+            "Alice",
             Field.FirstName,
-            SortOrder.Descending,
-            out int binaryDescendingComparisons);
+            out int singleComparisons);
 
         Console.WriteLine(
-            $"Binary descending found: {binaryDescending?.FirstName}, comparisons: {binaryDescendingComparisons}");
+            $"Binary single element: {(singleIndex == 0 ? "PASS" : "FAIL")}");
 
         Console.WriteLine("=== TESTS FINISHED ===");
+        Console.WriteLine();
     }
 }

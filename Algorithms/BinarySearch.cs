@@ -6,21 +6,39 @@ namespace SearchingSorting.Algorithms;
 
 public class BinarySearch
 {
-    public static Contact? Search(
+    /// <summary>
+    /// Searches an array that is already sorted in ascending order
+    /// by the selected field.
+    /// Returns the lowest index when duplicate values exist.
+    /// Returns -1 when the target is not found.
+    /// Time complexity: O(log n).
+    /// Space complexity: O(1).
+    /// </summary>
+    public static int Search(
         Contact[] contacts,
         string searchTerm,
         Field field,
-        SortOrder order,
         out int comparisons)
     {
+        if (contacts == null)
+        {
+            throw new ArgumentNullException(nameof(contacts));
+        }
+
+        if (searchTerm == null)
+        {
+            throw new ArgumentNullException(nameof(searchTerm));
+        }
+
         comparisons = 0;
 
         int left = 0;
         int right = contacts.Length - 1;
+        int firstMatchIndex = -1;
 
         while (left <= right)
         {
-            int middle = (left + right) / 2;
+            int middle = left + (right - left) / 2;
 
             string middleValue =
                 ContactComparer.GetFieldValue(contacts[middle], field);
@@ -32,33 +50,22 @@ public class BinarySearch
 
             if (result == 0)
             {
-                return contacts[middle];
-            }
+                firstMatchIndex = middle;
 
-            if (order == SortOrder.Ascending)
+                // Continue searching to the left because
+                // there may be an earlier duplicate.
+                right = middle - 1;
+            }
+            else if (result < 0)
             {
-                if (result < 0)
-                {
-                    left = middle + 1;
-                }
-                else
-                {
-                    right = middle - 1;
-                }
+                left = middle + 1;
             }
             else
             {
-                if (result > 0)
-                {
-                    left = middle + 1;
-                }
-                else
-                {
-                    right = middle - 1;
-                }
+                right = middle - 1;
             }
         }
 
-        return null;
+        return firstMatchIndex;
     }
 }
